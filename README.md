@@ -11,6 +11,8 @@ Abre `index.html` en la raíz del proyecto; este redirige a `HTML/simodo.html`. 
 
 El panel de preguntas está separado en `JS/PanelEvaluacion.js` y `CSS/PanelEvaluacion.css`. El acceso y las asignaciones se consultan desde las pestañas `SUPERUSUARIOS` y `DOCENTES` de Google Sheets mediante el servicio de lectura en `AppsScript/Code.gs`.
 
+## Perfiles y fotos
+
 Los perfiles autorizados y el personal evaluado se leen de la hoja de cálculo al iniciar sesión. Al borrar una fila de `DOCENTES`, esa persona deja de aparecer en la siguiente consulta. Las fotos de perfil continúan cargándose localmente desde `IMG/Perfiles/`.
 
 Para agregar las fotos, coloca cada imagen JPG en `IMG/Perfiles/` con el DNI como nombre de archivo, por ejemplo `21814585.jpg`. El perfil correspondiente mostrará automáticamente esa imagen; mientras falte, aparecerá el avatar genérico.
