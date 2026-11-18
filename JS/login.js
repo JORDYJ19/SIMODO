@@ -5,6 +5,10 @@ const evaluators = {
   "21835201": { nombre: "PASACHE MEDINA, FLOR DE MARIA", rol: "Coordinadora de Ciencia y Tecnología" },
   "21868710": { nombre: "RAMOS QUISPE, LUIS ALBERTO", rol: "Coordinador de Matemática" },
   "21461393": { nombre: "YELLESCAS RIOS, BENIGNA YNES", rol: "Coordinadora de Comunicación" },
+  "42506694": { nombre: "RAMON BAUTISTA, MIRIAN JAKELYN", rol: "Subdirectora" },
+  "45135863": { nombre: "QUISPE SALVADOR, JESABELL", rol: "PIP" },
+  "70602726": { nombre: "ROMERO CRUZ, CARLOS ELEODORO", rol: "CIST" },
+  "40793925": { nombre: "TASAYCO TASYACO, JOSE EDUARDO", rol: "Coordinador de Tutoría" },
 };
 
 const personnel = [
@@ -83,11 +87,7 @@ app.innerHTML = `
       <header id="app-header" class="app-header" hidden>
         <div class="brand-lockup">
           <div class="brand-mark" aria-hidden="true">
-            <svg viewBox="0 0 48 48" role="img">
-              <path d="M7 14 24 7l17 7-17 7L7 14Z" fill="currentColor"/>
-              <path d="M13 18v8c6 5 16 5 22 0v-8l-11 5-11-5Z" fill="currentColor"/>
-              <text x="24" y="42" text-anchor="middle" fill="white" font-size="18" font-weight="800">S</text>
-            </svg>
+            <img src="../IMG/Perfiles/logo.jpg" alt="Logo del colegio Simón Bolívar de Sunampe, Chincha">
           </div>
           <div class="brand-copy">
             <strong>SIMODO</strong>
@@ -166,6 +166,7 @@ app.innerHTML = `
           <div class="person-profile">
             <span class="person-avatar" aria-hidden="true">
               <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3-7 8-7s8 3 8 7"/></svg>
+              <img id="profile-photo" alt="" hidden>
             </span>
             <div>
               <p>Panel de evaluación</p>
@@ -215,32 +216,31 @@ form.addEventListener("submit", (event) => {
   const assignedPersonnel = dni === DIRECTOR_DNI
     ? personnel.filter((person) => person.dni !== DIRECTOR_DNI)
     : personnel.filter((person) => person.evaluadores.includes(dni));
-  const user = evaluator || { nombre: "TIPIAN LEVANO, VILMA ROSARIO", rol: "Directora" };
+  const user = evaluator
+    ? { ...evaluator, dni }
+    : { nombre: "TIPIAN LEVANO, VILMA ROSARIO", rol: "Directora", dni: DIRECTOR_DNI };
 
   renderAssignments({ usuario: user, docentes: assignedPersonnel });
 });
 
-function logout() {
-  assignments.hidden = true;
-  form.hidden = false;
-  appHeader.hidden = true;
-  welcomeHero.hidden = true;
-  message.textContent = "";
-  message.classList.remove("message-error");
-  dniInput.value = "";
-  loginCard.classList.remove("login-card-expanded");
-  appShell.classList.remove("dashboard-mode");
-  document.querySelector("#evaluation-panel").replaceChildren();
-  dniInput.focus();
-}
-
 function renderAssignments(result) {
   const user = result.usuario;
   if (!user || typeof user.nombre !== "string" || typeof user.rol !== "string"
+      || typeof user.dni !== "string"
       || !Array.isArray(result.docentes) || typeof window.PanelEvaluacion !== "function") {
     showError("No se pudo preparar el panel de evaluación.");
     return;
   }
+
+  const profilePhoto = document.querySelector("#profile-photo");
+  profilePhoto.hidden = true;
+  profilePhoto.onload = () => {
+    profilePhoto.hidden = false;
+  };
+  profilePhoto.onerror = () => {
+    profilePhoto.hidden = true;
+  };
+  profilePhoto.src = `../IMG/Perfiles/${user.dni}.jpg`;
 
   document.querySelector("#welcome-name").textContent = user.nombre
     .toLocaleLowerCase("es")
@@ -251,7 +251,7 @@ function renderAssignments(result) {
   form.hidden = true;
   appShell.classList.add("dashboard-mode");
   loginCard.classList.add("login-card-expanded");
-  new window.PanelEvaluacion(document.querySelector("#evaluation-panel"), result.docentes, logout);
+  new window.PanelEvaluacion(document.querySelector("#evaluation-panel"), result.docentes);
   assignments.hidden = false;
   message.textContent = "";
 }

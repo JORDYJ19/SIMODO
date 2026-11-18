@@ -10,10 +10,9 @@
   ];
 
   class PanelEvaluacion {
-    constructor(root, docentes, onChangeUser) {
+    constructor(root, docentes) {
       this.root = root;
       this.docentes = docentes;
-      this.onChangeUser = onChangeUser;
       this.render();
     }
 
@@ -25,7 +24,7 @@
               <span class="section-heading-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24"><path d="M4 19h16M6 16V9m6 7V5m6 11v-4"/></svg>
               </span>
-              <h3 id="evaluation-title">Datos del docente a evaluar</h3>
+              <h3 id="evaluation-title">Datos de la persona a evaluar</h3>
             </div>
             <span class="evaluation-count">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm8 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM2 19c0-3 2-5 6-5s6 2 6 5H2Zm11 0c0-2 1-4 4-4s5 2 5 4h-9Z"/></svg>
@@ -33,58 +32,73 @@
             </span>
           </div>
 
-          <div class="teacher-picker">
+          <div class="teacher-picker" ${this.docentes.length ? "" : "hidden"}>
             <div class="form-field">
-              <label for="teacher-select">Nombre del docente</label>
+              <label for="teacher-select">Nombre del docente o personal</label>
               <select id="teacher-select" required>
-                <option value="">Selecciona un docente</option>
+                <option value="">Selecciona una persona</option>
               </select>
             </div>
             <div class="area-field" aria-live="polite">
-              <span>Área del docente</span>
+              <span id="teacher-detail-label">Área o cargo</span>
               <div>
-                <strong id="teacher-area">Sin seleccionar</strong>
+                <strong id="teacher-area">Elige una persona para evaluar</strong>
                 <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5m0-8h.01"/></svg>
               </div>
             </div>
-            <button id="change-user" class="change-user-button" type="button">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg>
-              <span>Cambiar usuario</span>
+            <button id="start-evaluation" class="change-user-button evaluate-button" type="button" disabled>
+              <span>EVALUAR</span>
             </button>
           </div>
+          <div class="no-assigned-state" ${this.docentes.length ? "hidden" : ""}>
+            <p class="no-assigned-message">
+              Tu acceso está habilitado, pero todavía no tienes docentes asignados.
+            </p>
+          </div>
 
-          <form id="evaluation-form" class="evaluation-form" hidden>
-            <div class="question-heading">
-              <div>
-                <p class="evaluation-eyebrow">Criterios de observación</p>
-                <h3>Estructura de la sesión</h3>
+          <dialog id="evaluation-dialog" class="evaluation-dialog" aria-labelledby="dialog-title">
+            <div class="evaluation-dialog-content">
+              <div class="dialog-heading">
+                <div>
+                  <p class="evaluation-eyebrow">Criterios de observación</p>
+                  <h3 id="dialog-title">Estructura de la sesión</h3>
+                  <p id="evaluating-person" class="dialog-person"></p>
+                </div>
+                <button id="close-evaluation" class="dialog-close" type="button" aria-label="Cerrar evaluación">×</button>
               </div>
-              <p>Marca una respuesta por cada pregunta.</p>
-            </div>
-            <div id="question-list" class="question-list"></div>
-            <p id="evaluation-message" class="evaluation-message" role="alert" hidden></p>
-            <div class="evaluation-actions">
-              <button class="consolidate-button" type="submit">Ver consolidado</button>
-            </div>
-          </form>
 
-          <section id="evaluation-summary" class="evaluation-summary" aria-live="polite" hidden>
-            <div class="summary-heading">
-              <div>
-                <p class="evaluation-eyebrow">Resultado</p>
-                <h3>Consolidado de evaluación</h3>
-              </div>
-              <button id="edit-evaluation" class="edit-button" type="button">Editar respuestas</button>
+              <form id="evaluation-form" class="evaluation-form">
+                <p class="question-instructions">Marca una respuesta por cada pregunta.</p>
+                <div id="question-list" class="question-list"></div>
+                <p id="evaluation-message" class="evaluation-message" role="alert" hidden></p>
+                <div class="evaluation-actions">
+                  <button id="cancel-evaluation" class="edit-button" type="button">Volver</button>
+                  <button class="consolidate-button" type="submit">Ver consolidado</button>
+                </div>
+              </form>
+
+              <section id="evaluation-summary" class="evaluation-summary" aria-live="polite" hidden>
+                <div class="summary-heading">
+                  <div>
+                    <p class="evaluation-eyebrow">Resultado</p>
+                    <h3>Consolidado de evaluación</h3>
+                  </div>
+                  <button id="edit-evaluation" class="edit-button" type="button">Editar respuestas</button>
+                </div>
+                <p id="summary-teacher" class="summary-teacher"></p>
+                <ol id="summary-answers" class="summary-answers"></ol>
+                <p class="local-only-note">Este consolidado es temporal y no se guarda al cerrar la página.</p>
+              </section>
             </div>
-            <p id="summary-teacher" class="summary-teacher"></p>
-            <ol id="summary-answers" class="summary-answers"></ol>
-            <p class="local-only-note">Este consolidado es temporal y no se guarda al cerrar la página.</p>
-          </section>
+          </dialog>
         </section>
       `;
 
       this.teacherSelect = this.root.querySelector("#teacher-select");
       this.areaLabel = this.root.querySelector("#teacher-area");
+      this.detailLabel = this.root.querySelector("#teacher-detail-label");
+      this.startButton = this.root.querySelector("#start-evaluation");
+      this.dialog = this.root.querySelector("#evaluation-dialog");
       this.form = this.root.querySelector("#evaluation-form");
       this.questionList = this.root.querySelector("#question-list");
       this.message = this.root.querySelector("#evaluation-message");
@@ -93,10 +107,18 @@
       this.buildQuestions();
       this.teacherSelect.addEventListener("change", () => this.selectTeacher());
       this.form.addEventListener("submit", (event) => this.showConsolidated(event));
-      this.root.querySelector("#change-user").addEventListener("click", this.onChangeUser);
+      this.startButton.addEventListener("click", () => this.startEvaluation());
+      this.root.querySelector("#close-evaluation").addEventListener("click", () => this.dialog.close());
+      this.root.querySelector("#cancel-evaluation").addEventListener("click", () => this.dialog.close());
       this.root.querySelector("#edit-evaluation").addEventListener("click", () => {
         this.summary.hidden = true;
         this.form.hidden = false;
+        this.dialog.querySelector(".evaluation-dialog-content").scrollTop = 0;
+      });
+      this.dialog.addEventListener("click", (event) => {
+        if (event.target === this.dialog) {
+          this.dialog.close();
+        }
       });
     }
 
@@ -156,11 +178,53 @@
 
     selectTeacher() {
       const selected = this.docentes.find((docente) => docente.dni === this.teacherSelect.value);
-      this.areaLabel.textContent = selected ? selected.area : "Sin seleccionar";
-      this.form.hidden = !selected;
+      const isTeaching = selected ? this.isTeachingStaff(selected) : null;
+      this.detailLabel.textContent = selected
+        ? (isTeaching ? "Área del docente" : "Cargo del personal")
+        : "Área o cargo";
+      this.areaLabel.textContent = selected ? selected.area : "Elige una persona para evaluar";
+      this.startButton.disabled = !selected;
       this.summary.hidden = true;
       this.message.hidden = true;
       this.form.reset();
+    }
+
+    isTeachingStaff(person) {
+      const normalizedArea = person.area
+        .toLocaleLowerCase("es")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+      const jobTitleTerms = [
+        "directora",
+        "subdirectora",
+        "coordinador",
+        "cist",
+        "pip",
+        "vigilante",
+        "auxiliar",
+        "secretaria",
+        "mantenimiento",
+        "tesorer",
+        "biblioteca",
+        "sin definir",
+      ];
+
+      return !jobTitleTerms.some((term) => normalizedArea.includes(term));
+    }
+
+    startEvaluation() {
+      const teacher = this.docentes.find((docente) => docente.dni === this.teacherSelect.value);
+      if (!teacher) {
+        return;
+      }
+
+      this.root.querySelector("#evaluating-person").textContent =
+        `${teacher.nombre} · ${this.areaLabel.textContent}`;
+      this.form.hidden = false;
+      this.summary.hidden = true;
+      this.message.hidden = true;
+      this.dialog.showModal();
+      this.dialog.querySelector(".evaluation-dialog-content").scrollTop = 0;
     }
 
     showConsolidated(event) {

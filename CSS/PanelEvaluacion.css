@@ -193,12 +193,105 @@
   background: #193a78;
 }
 
+.change-user-button:disabled {
+  transform: none;
+  background: #8795ad;
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
 .change-user-button svg {
   width: 18px;
   fill: none;
   stroke: currentColor;
   stroke-linecap: round;
   stroke-width: 2;
+}
+
+.no-assigned-state {
+  display: grid;
+  justify-items: start;
+  gap: 12px;
+  padding: 18px;
+  border: 1px dashed #cbd6e8;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.62);
+}
+
+.no-assigned-message {
+  margin: 0;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.evaluation-dialog {
+  width: min(920px, calc(100vw - 32px));
+  max-width: 920px;
+  max-height: min(90vh, 900px);
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid #dce5f3;
+  border-radius: 20px;
+  background: #f7f9fd;
+  color: #10244f;
+  box-shadow: 0 28px 80px rgba(13, 35, 75, 0.3);
+}
+
+.evaluation-dialog::backdrop {
+  background: rgba(15, 31, 57, 0.48);
+  backdrop-filter: blur(3px);
+}
+
+.evaluation-dialog-content {
+  max-height: min(90vh, 900px);
+  padding: 26px;
+  overflow: auto;
+}
+
+.dialog-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.dialog-heading h3 {
+  margin: 0;
+  color: #13254d;
+  font-size: 23px;
+}
+
+.dialog-person {
+  margin: 7px 0 0;
+  color: #647594;
+  font-size: 13px;
+}
+
+.dialog-close {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid #d5deed;
+  border-radius: 50%;
+  background: #fff;
+  color: #52627f;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.dialog-close:hover {
+  background: #edf3ff;
+}
+
+.question-instructions {
+  margin: 0 0 14px;
+  color: #64748b;
+  font-size: 13px;
 }
 
 .question-heading {
@@ -377,6 +470,10 @@
     width: 100%;
   }
 
+  .evaluation-dialog-content {
+    padding: 20px 16px;
+  }
+
   .question-item {
     grid-template-columns: minmax(0, 1fr);
     gap: 10px;
@@ -422,5 +519,28 @@
   .evaluation-count {
     padding: 7px 9px;
     font-size: 11px;
+  }
+
+  .evaluation-dialog {
+    width: calc(100vw - 20px);
+    max-height: 94vh;
+    border-radius: 16px;
+  }
+
+  .evaluation-dialog-content {
+    max-height: 94vh;
+    padding: 18px 12px;
+  }
+
+  .dialog-heading h3 {
+    font-size: 19px;
+  }
+
+  .evaluation-actions {
+    flex-direction: column-reverse;
+  }
+
+  .evaluation-actions button {
+    width: 100%;
   }
 }
