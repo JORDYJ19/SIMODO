@@ -1,81 +1,5 @@
-const DIRECTOR_DNI = "21814585";
-
-const evaluators = {
-  "21850467": { nombre: "NAPA MESIAS, GABRIEL", rol: "Coordinador de Ciencias Sociales" },
-  "21835201": { nombre: "PASACHE MEDINA, FLOR DE MARIA", rol: "Coordinadora de Ciencia y Tecnología" },
-  "21868710": { nombre: "RAMOS QUISPE, LUIS ALBERTO", rol: "Coordinador de Matemática" },
-  "21461393": { nombre: "YELLESCAS RIOS, BENIGNA YNES", rol: "Coordinadora de Comunicación" },
-  "42506694": { nombre: "RAMON BAUTISTA, MIRIAN JAKELYN", rol: "Subdirectora" },
-  "45135863": { nombre: "QUISPE SALVADOR, JESABELL", rol: "PIP" },
-  "70602726": { nombre: "ROMERO CRUZ, CARLOS ELEODORO", rol: "CIST" },
-  "40793925": { nombre: "TASAYCO TASYACO, JOSE EDUARDO", rol: "Coordinador de Tutoría" },
-};
-
-const personnel = [
-  { nombre: "AGUILAR VALENCIA, CYNTHIA MARIELA", area: "EPT", dni: "44817382", evaluadores: ["21835201"] },
-  { nombre: "ALMEYDA ESTEBAN, ANA MARIA", area: "DPCC", dni: "40753258", evaluadores: ["21850467"] },
-  { nombre: "ALMEYDA MUNAYCO, SILHUY LISETT", area: "MAT y CYT", dni: "40742689", evaluadores: ["21835201", "21868710"] },
-  { nombre: "ANCHANTE TORRES, MILAGROS GUADALUPE", area: "Psicología", dni: "41352202", evaluadores: [] },
-  { nombre: "AQUIJE GUZMAN, RICHARD ANTHONY", area: "Edu. Artística", dni: "42363032", evaluadores: ["21461393"] },
-  { nombre: "ASTORAYME GALVEZ, JULY LUZ", area: "CYT", dni: "21871746", evaluadores: ["21835201"] },
-  { nombre: "ATUNCAR AVALOS, JESUS ANDRES", area: "Edu. Física", dni: "71870168", evaluadores: ["21868710"] },
-  { nombre: "ATUNCAR YATACO, PIO", area: "P. Mantenimiento", dni: "21849685", evaluadores: [] },
-  { nombre: "AVALOS SARAVIA, JUAN JOSE", area: "Comunicación", dni: "21877673", evaluadores: ["21461393"] },
-  { nombre: "AVILES VASQUEZ, ENRIQUE FERNANDO", area: "Comunicación", dni: "21814329", evaluadores: ["21461393"] },
-  { nombre: "BENAVIDES TORRES, JORGE SALVADOR", area: "Vigilante", dni: "43400141", evaluadores: [] },
-  { nombre: "CAYAMPI VILCHEZ, FERMIN", area: "Auxiliar", dni: "44404505", evaluadores: [] },
-  { nombre: "CHAVEZ LEVANO, EDINSON ANIBAL", area: "Edu. Física", dni: "70655455", evaluadores: ["21868710"] },
-  { nombre: "CHOQUE YACACO, PILAR", area: "Edu. Artística", dni: "45739536", evaluadores: ["21461393"] },
-  { nombre: "CONISLLA CARDENAS, OSCAR RONNY", area: "DPCC", dni: "21813265", evaluadores: ["21850467"] },
-  { nombre: "CRISOSTOMO GIRAO, LIDIA BELEN", area: "Matemática", dni: "21795989", evaluadores: ["21868710"] },
-  { nombre: "DE LA CRUZ BARRIOS, MILAGROS DEL PILAR", area: "CYT", dni: "41440624", evaluadores: ["21835201"] },
-  { nombre: "DE LA CRUZ CARRASCO, MARIA YSABEL", area: "Matemática", dni: "21854941", evaluadores: ["21868710"] },
-  { nombre: "DEL RIO MIRANDA, CESAR ORLANDO", area: "Matemática", dni: "21872171", evaluadores: ["21868710"] },
-  { nombre: "DELGADO CRISTOBAL, ROSA YOLANDA", area: "Inglés", dni: "70139799", evaluadores: ["21461393"] },
-  { nombre: "ECHEGARAY SANCHEZ, JUAN DOMINGO", area: "Edu. Física", dni: "21854433", evaluadores: ["21868710"] },
-  { nombre: "ESCOBAR POMA, CAROLINA BRIGIDA", area: "Secretaría", dni: "70057708", evaluadores: [] },
-  { nombre: "EUSEBIO ALFARO, EDILBERTO", area: "Comunicación", dni: "21854248", evaluadores: ["21461393"] },
-  { nombre: "GARCIA AVALOS, YANET DOMINICA", area: "Matemática", dni: "21870738", evaluadores: ["21868710"] },
-  { nombre: "GARCIA RAMOS, ANTONIA PAOLA", area: "Edu. Religiosa", dni: "21882751", evaluadores: ["21850467"] },
-  { nombre: "HERNANDEZ GARCIA, NADHIA ISABEL", area: "CYT", dni: "21546008", evaluadores: ["21835201"] },
-  { nombre: "HUAMAN MACAZANA, JORGE JAVIER", area: "CYT", dni: "21522668", evaluadores: ["21835201"] },
-  { nombre: "HUAPAYA MOYANO, LEONOR ELIZABET", area: "Ciencias Sociales", dni: "74400402", evaluadores: ["21850467"] },
-  { nombre: "HUAROTO BENDEZU, ELVIRA ROSARIO", area: "Ciencias Sociales", dni: "21577963", evaluadores: ["21850467"] },
-  { nombre: "LEON FLORES, EUMELIA", area: "Inglés", dni: "21579805", evaluadores: ["21461393"] },
-  { nombre: "MAGALLANES MARTINEZ, WILMER JOAN", area: "Matemática", dni: "42797290", evaluadores: ["21868710"] },
-  { nombre: "MARCELO ANICAMA, PAULO CESAR", area: "Personal de mantenimiento", dni: "43092615", evaluadores: [] },
-  { nombre: "MARTINEZ PALOMINO, CARMEN GLADYS", area: "Comunicación", dni: "40027501", evaluadores: ["21461393"] },
-  { nombre: "MEJIA MARCOS, ELVIS DUVAL", area: "Matemática", dni: "40746722", evaluadores: ["21868710"] },
-  { nombre: "MELO MUJICA, CARMELO GIOVANNI", area: "EPT", dni: "43977726", evaluadores: ["21835201"] },
-  { nombre: "MENDOZA MATIAS, DELIA", area: "Tesorería / Biblioteca", dni: "21846881", evaluadores: [] },
-  { nombre: "MENDOZA ZUÑIGA, FELICITA EMPERATRIZ", area: "Edu. Religiosa", dni: "21867328", evaluadores: ["21850467"] },
-  { nombre: "MEZA HERNANDEZ, LECCI JAVIER", area: "Sin definir", dni: "21850865", evaluadores: [] },
-  { nombre: "MONTIEL RAMOS, VANESA", area: "Inglés", dni: "43176421", evaluadores: ["21461393"] },
-  { nombre: "MOSAYHUATE MENDOZA, MARIANELLA A AURORA", area: "CyT", dni: "40132916", evaluadores: ["21835201"] },
-  { nombre: "MUNAYCO SARAVIA, CARLOS ALBERTO", area: "EPT", dni: "43212935", evaluadores: ["21835201"] },
-  { nombre: "NAPA ATUNCAR, NILTON CESAR", area: "DPCC", dni: "21846013", evaluadores: ["21850467"] },
-  { nombre: "NAPA MESIAS, GABRIEL", area: "Coordinador CCSS", dni: "21850467", evaluadores: [] },
-  { nombre: "PASACHE MEDINA, FLOR DE MARIA", area: "Coordinadora CYT", dni: "21835201", evaluadores: [] },
-  { nombre: "PASACHE MEDINA, JULIO CESAR", area: "Ciencias Sociales", dni: "43114464", evaluadores: ["21850467"] },
-  { nombre: "PEÑA ROJAS, ROSARIO MILAGRITOS", area: "Auxiliar", dni: "21851869", evaluadores: [] },
-  { nombre: "PEÑALOZA TORRES, JULY VERONICA", area: "Comunicación", dni: "46778305", evaluadores: ["21461393"] },
-  { nombre: "QUIJANDRIA RAMOS, EVELYN GIANNA", area: "EPT", dni: "44421987", evaluadores: ["21835201"] },
-  { nombre: "QUISPE SALVADOR, JESABEL", area: "PIP", dni: "45135863", evaluadores: [] },
-  { nombre: "RAMON BAUTISTA, MIRIAN JAKELYN", area: "Subdirectora", dni: "42506694", evaluadores: [] },
-  { nombre: "RAMOS QUISPE, LUIS ALBERTO", area: "Coordinador Matemática", dni: "21868710", evaluadores: [] },
-  { nombre: "ROMERO CRUZ, CARLOS ELEODORO", area: "CIST", dni: "70602726", evaluadores: [] },
-  { nombre: "ROSAS ROJAS, JAVIER ELMER", area: "Edu. Artística", dni: "21846225", evaluadores: ["21461393"] },
-  { nombre: "SANCHEZ RAMOS, LUCY JANETH", area: "Ciencias Sociales", dni: "10440224", evaluadores: ["21850467"] },
-  { nombre: "SANTIAGO AYBAR, PILAR FABIOLA", area: "Área no especificada", dni: "21872422", evaluadores: [] },
-  { nombre: "SOTELO SANCHEZ, ALBERTO DAVID", area: "Auxiliar", dni: "21812193", evaluadores: [] },
-  { nombre: "TASAYCO TASYACO, JOSE EDUARDO", area: "Coordinador Tutoría", dni: "40793925", evaluadores: [] },
-  { nombre: "TIPIAN LEVANO, VILMA ROSARIO", area: "Directora", dni: DIRECTOR_DNI, evaluadores: [] },
-  { nombre: "TORRES ROJAS, ESPERANZA HILDA", area: "Comunicación", dni: "21851901", evaluadores: ["21461393"] },
-  { nombre: "VARGAS DEL RIO, MIGUEL ANGEL", area: "Inglés", dni: "21870795", evaluadores: ["21461393"] },
-  { nombre: "YEREN ROJAS, GRECIA", area: "Inglés", dni: "43809400", evaluadores: ["21461393"] },
-  { nombre: "YELLESCAS RIOS, BENIGNA YNES", area: "Coordinadora Comunicación", dni: "21461393", evaluadores: [] },
-  { nombre: "ZAVALA VALENCIA, MILAGRO ELIZABETH", area: "DPCC", dni: "41234795", evaluadores: ["21850467"] },
-];
+const DATA_API_URL = "https://script.google.com/macros/s/AKfycbxw3vbxjGqgdSmtSuCnAU_E132KfbGkFvmKnC6Uu-pruJy1cyMLTujkAE1R2kDuWhmv/exec";
+let jsonpRequestCount = 0;
 
 const app = document.querySelector("#login-app");
 
@@ -195,7 +119,7 @@ const loginCard = document.querySelector(".login-card");
 const appHeader = document.querySelector("#app-header");
 const welcomeHero = document.querySelector("#welcome-hero");
 
-form.addEventListener("submit", (event) => {
+form.addEventListener("submit", async (event) => {
   event.preventDefault();
   message.textContent = "";
   message.classList.remove("message-error");
@@ -207,21 +131,67 @@ form.addEventListener("submit", (event) => {
     return;
   }
 
-  const evaluator = evaluators[dni];
-  if (!evaluator && dni !== DIRECTOR_DNI) {
-    showError("DNI NO VALIDO");
-    return;
+  const submitButton = document.querySelector("#submit-button");
+  submitButton.disabled = true;
+  message.classList.add("message-pending");
+  message.textContent = "Consultando los datos del colegio...";
+
+  try {
+    const result = await loadAssignments(dni);
+    message.classList.remove("message-pending");
+    renderAssignments(result);
+  } catch (error) {
+    message.classList.remove("message-pending");
+    showError(error.message || "No se pudo consultar la lista del colegio.");
+  } finally {
+    submitButton.disabled = false;
+  }
+});
+
+function loadAssignments(dni) {
+  if (!DATA_API_URL) {
+    return Promise.reject(new Error("Falta configurar la URL del servicio de Google Sheets."));
   }
 
-  const assignedPersonnel = dni === DIRECTOR_DNI
-    ? personnel.filter((person) => person.dni !== DIRECTOR_DNI)
-    : personnel.filter((person) => person.evaluadores.includes(dni));
-  const user = evaluator
-    ? { ...evaluator, dni }
-    : { nombre: "TIPIAN LEVANO, VILMA ROSARIO", rol: "Directora", dni: DIRECTOR_DNI };
+  return new Promise((resolve, reject) => {
+    const callbackName = `simodoJsonp_${Date.now()}_${++jsonpRequestCount}`;
+    const script = document.createElement("script");
+    const requestUrl = new URL(DATA_API_URL);
+    let timeoutId;
 
-  renderAssignments({ usuario: user, docentes: assignedPersonnel });
-});
+    function cleanup() {
+      clearTimeout(timeoutId);
+      delete window[callbackName];
+      script.remove();
+    }
+
+    window[callbackName] = (response) => {
+      cleanup();
+      if (!response || response.ok !== true) {
+        reject(new Error(response && response.error
+          ? response.error
+          : "El servicio devolvió una respuesta inválida."));
+        return;
+      }
+
+      resolve(response);
+    };
+
+    script.onerror = () => {
+      cleanup();
+      reject(new Error("No se pudo conectar con Apps Script. Revisa la URL y el despliegue."));
+    };
+    script.async = true;
+    requestUrl.searchParams.set("dni", dni);
+    requestUrl.searchParams.set("callback", callbackName);
+    script.src = requestUrl.toString();
+    timeoutId = setTimeout(() => {
+      cleanup();
+      reject(new Error("La consulta tardó demasiado. Inténtalo nuevamente."));
+    }, 15000);
+    document.head.append(script);
+  });
+}
 
 function renderAssignments(result) {
   const user = result.usuario;
@@ -257,6 +227,7 @@ function renderAssignments(result) {
 }
 
 function showError(text) {
+  message.classList.remove("message-pending");
   assignments.hidden = true;
   message.textContent = text;
   message.classList.add("message-error");
